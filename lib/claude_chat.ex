@@ -111,10 +111,17 @@ defmodule ClaudeChat do
     |> Enum.with_index(1)
     |> Enum.each(fn {chat, index} ->
       IO.puts("""
-      #{index}. #{chat.timestamp} (#{chat.model})
+      #{index}. #{chat.name} (#{chat.model})
+      Date: #{format_timestamp(chat.timestamp)}
+      Preview:
       #{chat.preview}
       """)
     end)
+  end
+
+  defp format_timestamp(timestamp) do
+    {:ok, datetime, _} = DateTime.from_iso8601(timestamp)
+    Calendar.strftime(datetime, "%Y-%m-%d %H:%M:%S")
   end
 
   defp load_chat(number) do
@@ -132,7 +139,7 @@ defmodule ClaudeChat do
     end
   end
 
-  defp send_message(messages, "openai") do
+  def send_message(messages, "openai") do
     body =
       Jason.encode!(%{
         model: "gpt-4o-mini",
@@ -161,7 +168,7 @@ defmodule ClaudeChat do
     end
   end
 
-  defp send_message(messages, "claude") do
+  def send_message(messages, "claude") do
     body =
       Jason.encode!(%{
         model: "claude-3-5-haiku-latest",
