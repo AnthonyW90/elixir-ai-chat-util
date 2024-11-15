@@ -25,3 +25,4 @@ claude_chat-*.tar
 # Temporary files, for example, from tests.
 /tmp/
 key.txt
+.ai_chat/
